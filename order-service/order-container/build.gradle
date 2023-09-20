@@ -1,19 +1,9 @@
-plugins {
-    id 'java'
-}
-
-group = 'me.jincrates.ecommerce'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    implementation project(':order-service:order-domain:order-domain-core')
+    implementation project(':order-service:order-domain:order-application-service')
+    implementation project(':order-service:order-application')
+    implementation project(':order-service:order-dataaccess')
+    implementation project(':order-service:order-messaging')
 }
 
-test {
-    useJUnitPlatform()
-}
+

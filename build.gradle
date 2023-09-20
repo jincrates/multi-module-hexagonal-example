@@ -1,13 +1,18 @@
-// 버전 관리
+// Gradle이 빌드되기 전에 실행되는 설정
 buildscript {
 	ext {
 		springBootVersion = '3.1.3'
 		dependencyManagementVersion = '1.1.3'
 		projectVersion = '0.0.1-SNAPSHOT'
 
-		lombokVersion = '1.18.26'
-		h2DatabaseVersion = '2.1.214'
+		//lombokVersion = '1.18.26'
+		//h2DatabaseVersion = '2.1.214'
 		mockitoVersion = '5.2.0'
+	}
+
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		classpath "io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}"
 	}
 }
 
@@ -27,20 +32,29 @@ repositories {
 
 dependencies {
 	// lombok
-	compileOnly "org.projectlombok:lombok:${lombokVersion}"
-	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	//compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	//annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
 	// h2 database
-	runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
+	//runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
 
 	// mockito
 	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
 }
 
-// 하위 모든 프로젝트 공통 세팅
+// 현재의 Root 프로젝트와 앞으로 추가될 서브 모듈에 대한 설정
+allprojects {}
+
+// 전체 서브 모듈 공통 세팅
 subprojects {
 	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+
+	group = 'me.jincrates.ecommerce'
+	version = "${projectVersion}"
+	sourceCompatibility = '17'
 
 	repositories {
 		mavenCentral()
@@ -48,16 +62,17 @@ subprojects {
 
 	dependencies {
 		// lombok
-		compileOnly "org.projectlombok:lombok:${lombokVersion}"
-		annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+		//compileOnly "org.projectlombok:lombok:${lombokVersion}"
+		//annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
 		// h2 database
-		runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
+		//runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
 
 		// mockito
 		testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 	}
-}
 
-// Modules as per your POM
-// include 'order-service', 'common', 'infrastructure', 'customer-service', 'payment-service', 'restaurant-service'
+	test {
+		useJUnitPlatform()
+	}
+}
