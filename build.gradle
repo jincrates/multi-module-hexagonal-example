@@ -18,7 +18,7 @@ buildscript {
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
 		classpath "io.spring.gradle:dependency-management-plugin:${dependencyManagementVersion}"
-
+		// module-dependency-graph
 		classpath "com.savvasdalkitsis:module-dependency-graph:${moduleDependencyGraph}"
 	}
 }
@@ -40,13 +40,6 @@ repositories {
 }
 
 dependencies {
-	// lombok
-	//compileOnly "org.projectlombok:lombok:${lombokVersion}"
-	//annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
-
-	// h2 database
-	//runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
-
 	// mockito
 	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
