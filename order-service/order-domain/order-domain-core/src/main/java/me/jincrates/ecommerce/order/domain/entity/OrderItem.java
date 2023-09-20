@@ -1,9 +1,9 @@
-package me.jincrates.ecommerce.order.service.entity;
+package me.jincrates.ecommerce.order.domain.entity;
 
 import me.jincrates.ecommerce.domain.entity.BaseEntity;
 import me.jincrates.ecommerce.domain.valueobject.Money;
 import me.jincrates.ecommerce.domain.valueobject.OrderId;
-import me.jincrates.ecommerce.order.service.valueobject.OrderItemId;
+import me.jincrates.ecommerce.order.domain.valueobject.OrderItemId;
 
 public class OrderItem extends BaseEntity<OrderItemId> {
     private OrderId orderId;

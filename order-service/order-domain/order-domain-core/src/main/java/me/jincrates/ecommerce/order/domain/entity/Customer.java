@@ -1,4 +1,4 @@
-package me.jincrates.ecommerce.order.service.entity;
+package me.jincrates.ecommerce.order.domain.entity;
 
 import me.jincrates.ecommerce.domain.entity.AggregateRoot;
 import me.jincrates.ecommerce.domain.valueobject.CustomerId;

@@ -1,4 +1,4 @@
-package me.jincrates.ecommerce.order.service.exception;
+package me.jincrates.ecommerce.order.domain.exception;
 
 import me.jincrates.ecommerce.domain.exception.DomainException;
 

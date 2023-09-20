@@ -1,4 +1,4 @@
-package me.jincrates.ecommerce.order.service.entity;
+package me.jincrates.ecommerce.order.domain.entity;
 
 import java.util.List;
 import java.util.UUID;
@@ -8,10 +8,10 @@ import me.jincrates.ecommerce.domain.valueobject.Money;
 import me.jincrates.ecommerce.domain.valueobject.OrderId;
 import me.jincrates.ecommerce.domain.valueobject.OrderStatus;
 import me.jincrates.ecommerce.domain.valueobject.StoreId;
-import me.jincrates.ecommerce.order.service.exception.OrderDomainException;
-import me.jincrates.ecommerce.order.service.valueobject.OrderItemId;
-import me.jincrates.ecommerce.order.service.valueobject.StreetAddress;
-import me.jincrates.ecommerce.order.service.valueobject.TrackingId;
+import me.jincrates.ecommerce.order.domain.exception.OrderDomainException;
+import me.jincrates.ecommerce.order.domain.valueobject.OrderItemId;
+import me.jincrates.ecommerce.order.domain.valueobject.StreetAddress;
+import me.jincrates.ecommerce.order.domain.valueobject.TrackingId;
 
 public class Order extends AggregateRoot<OrderId> {
     private final CustomerId customerId;

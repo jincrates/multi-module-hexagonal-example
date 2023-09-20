@@ -28,7 +28,6 @@ plugins {
 	id 'org.springframework.boot' version "${springBootVersion}"
 	id 'io.spring.dependency-management' version "${dependencyManagementVersion}"
 	id 'com.savvasdalkitsis.module-dependency-graph' version "${moduleDependencyGraph}"
-
 }
 
 group = 'me.jincrates.ecommerce'
@@ -40,9 +39,12 @@ repositories {
 }
 
 dependencies {
+	// lombok
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
 	// mockito
 	testImplementation "org.mockito:mockito-core:${mockitoVersion}"
-
 }
 
 // 현재의 Root 프로젝트와 앞으로 추가될 서브 모듈에 대한 설정
@@ -64,8 +66,8 @@ subprojects {
 
 	dependencies {
 		// lombok
-		//compileOnly "org.projectlombok:lombok:${lombokVersion}"
-		//annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+		compileOnly "org.projectlombok:lombok:${lombokVersion}"
+		annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
 		// h2 database
 		//runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"

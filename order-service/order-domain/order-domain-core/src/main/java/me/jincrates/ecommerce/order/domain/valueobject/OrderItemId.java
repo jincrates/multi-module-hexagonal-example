@@ -1,4 +1,4 @@
-package me.jincrates.ecommerce.order.service.valueobject;
+package me.jincrates.ecommerce.order.domain.valueobject;
 
 import me.jincrates.ecommerce.domain.valueobject.BaseId;
 

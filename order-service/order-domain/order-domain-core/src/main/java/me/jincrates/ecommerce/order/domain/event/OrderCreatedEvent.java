@@ -1,7 +1,7 @@
-package me.jincrates.ecommerce.order.service.event;
+package me.jincrates.ecommerce.order.domain.event;
 
 import java.time.ZonedDateTime;
-import me.jincrates.ecommerce.order.service.entity.Order;
+import me.jincrates.ecommerce.order.domain.entity.Order;
 
 public class OrderCreatedEvent extends OrderEvent {
 

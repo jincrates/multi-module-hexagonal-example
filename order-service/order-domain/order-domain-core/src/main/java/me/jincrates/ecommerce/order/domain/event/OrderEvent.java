@@ -1,8 +1,8 @@
-package me.jincrates.ecommerce.order.service.event;
+package me.jincrates.ecommerce.order.domain.event;
 
 import java.time.ZonedDateTime;
 import me.jincrates.ecommerce.domain.event.DomainEvent;
-import me.jincrates.ecommerce.order.service.entity.Order;
+import me.jincrates.ecommerce.order.domain.entity.Order;
 
 public abstract class OrderEvent implements DomainEvent<Order> {
 
