@@ -12,6 +12,7 @@ buildscript {
         moduleDependencyGraph = '0.12'
         springKafkaVersion = '3.0.5'
         jacksonDatabindVersion = '2.15.2'
+        springTxVersion = '6.0.11'
     }
 
     repositories {

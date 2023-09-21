@@ -1,3 +1,13 @@
 dependencies {
+    //infra
+    implementation project(':infra:saga')
+    implementation project(':infra:outbox')
+
+    //domain
+    implementation project(':common:common-domain')
     implementation project(':order-service:order-domain:order-domain-core')
+
+    implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+    implementation "org.springframework.boot:spring-tx:${springTxVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
 }

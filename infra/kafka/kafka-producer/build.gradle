@@ -7,7 +7,4 @@ dependencies {
     implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
     implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
-
-
-
 }
