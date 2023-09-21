@@ -30,4 +30,6 @@ include 'infra:kafka:kafka-consumer'
 findProject(':infra:kafka:kafka-consumer')?.name = 'kafka-consumer'
 include 'infra:kafka:kafka-producer'
 findProject(':infra:kafka:kafka-producer')?.name = 'kafka-producer'
+include 'infra:outbox'
+findProject(':infra:outbox')?.name = 'outbox'
 
