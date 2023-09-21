@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':infra:kafka:kafka-config-data')
+    //implementation project(':infra:outbox')
+    implementation project(':common:common-domain')
+    implementation project(':order-service:order-domain:order-domain-core')
+
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    implementation "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}"
+
+
+
+}

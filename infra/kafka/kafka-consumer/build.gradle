@@ -1,0 +1,4 @@
+dependencies {
+    implementation project(':infra:kafka:kafka-config-data')
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+}
