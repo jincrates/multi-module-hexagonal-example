@@ -32,4 +32,6 @@ include 'infra:kafka:kafka-producer'
 findProject(':infra:kafka:kafka-producer')?.name = 'kafka-producer'
 include 'infra:outbox'
 findProject(':infra:outbox')?.name = 'outbox'
+include 'common:common-application'
+findProject(':common:common-application')?.name = 'common-application'
 

@@ -4,6 +4,9 @@ dependencies {
     implementation project(':order-service:order-application')
     implementation project(':order-service:order-dataaccess')
     implementation project(':order-service:order-messaging')
+
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
 }
 
 
