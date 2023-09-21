@@ -15,6 +15,7 @@ import me.jincrates.ecommerce.order.outbox.model.OrderPaymentEventPayload;
 import me.jincrates.ecommerce.order.outbox.model.OrderPaymentOutboxMessage;
 import me.jincrates.ecommerce.order.port.output.persistence.PaymentOutboxPort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component

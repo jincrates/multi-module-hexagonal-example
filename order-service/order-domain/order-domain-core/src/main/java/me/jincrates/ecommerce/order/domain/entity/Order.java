@@ -2,6 +2,7 @@ package me.jincrates.ecommerce.order.domain.entity;
 
 import java.util.List;
 import java.util.UUID;
+import lombok.Builder;
 import me.jincrates.ecommerce.domain.entity.AggregateRoot;
 import me.jincrates.ecommerce.domain.valueobject.CustomerId;
 import me.jincrates.ecommerce.domain.valueobject.Money;
@@ -16,19 +17,20 @@ import me.jincrates.ecommerce.order.domain.valueobject.TrackingId;
 public class Order extends AggregateRoot<OrderId> {
     private final CustomerId customerId;
     private final StoreId storeId;
-    private final StreetAddress streetAddress;
+    private final StreetAddress deliveryAddress;
     private final Money price;
     private final List<OrderItem> items;
     private TrackingId trackingId;
     private OrderStatus orderStatus;
     private List<String> failureMessages;
 
-    public Order(OrderId orderId, CustomerId customerId, StoreId storeId, StreetAddress streetAddress, Money price,
+    @Builder
+    private Order(OrderId orderId, CustomerId customerId, StoreId storeId, StreetAddress deliveryAddress, Money price,
         List<OrderItem> items, TrackingId trackingId, OrderStatus orderStatus, List<String> failureMessages) {
         super.setId(orderId);
         this.customerId = customerId;
         this.storeId = storeId;
-        this.streetAddress = streetAddress;
+        this.deliveryAddress = deliveryAddress;
         this.price = price;
         this.items = items;
         this.trackingId = trackingId;
@@ -87,8 +89,8 @@ public class Order extends AggregateRoot<OrderId> {
         return storeId;
     }
 
-    public StreetAddress getStreetAddress() {
-        return streetAddress;
+    public StreetAddress getDeliveryAddress() {
+        return deliveryAddress;
     }
 
     public Money getPrice() {

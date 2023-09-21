@@ -1,5 +1,6 @@
 package me.jincrates.ecommerce.order.domain.entity;
 
+import lombok.Builder;
 import me.jincrates.ecommerce.domain.entity.BaseEntity;
 import me.jincrates.ecommerce.domain.valueobject.Money;
 import me.jincrates.ecommerce.domain.valueobject.OrderId;
@@ -12,7 +13,8 @@ public class OrderItem extends BaseEntity<OrderItemId> {
     private final Money price;
     private final Money subTotal;
 
-    public OrderItem(OrderItemId orderItemId, OrderId orderId, Product product, int quantity, Money price, Money subTotal) {
+    @Builder
+    private OrderItem(OrderItemId orderItemId, OrderId orderId, Product product, int quantity, Money price, Money subTotal) {
         super.setId(orderItemId);
         this.orderId = orderId;
         this.product = product;

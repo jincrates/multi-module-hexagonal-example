@@ -1,3 +1,12 @@
 dependencies {
     implementation project(':order-service:order-domain:order-application-service')
+    //TODO: 이거 의존해야하는건가?
+    implementation project(':order-service:order-domain:order-domain-core')
+    implementation project(':common:common-domain')
+
+    // h2 database
+    runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
+
+    // jpa
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
 }

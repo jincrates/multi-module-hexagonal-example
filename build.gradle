@@ -71,9 +71,6 @@ subprojects {
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
 
-        // h2 database
-        //runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
-
         // mockito
         testImplementation "org.mockito:mockito-core:${mockitoVersion}"
     }
