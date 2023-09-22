@@ -58,9 +58,13 @@ public class OrderCreateHelper {
         return optionalStore.get();
     }
 
-    private void saveOrder(Order order) {
-
+    private Order saveOrder(Order order) {
+        Order savedOrder = orderPort.save(order);
+        if (savedOrder == null) {
+            log.error("Could not save order!");
+            throw new OrderDomainException("Could not save order!");
+        }
+        log.info("Order ist saved with id: {}", savedOrder.getId().getValue());
+        return savedOrder;
     }
-
-
 }
