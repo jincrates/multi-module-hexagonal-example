@@ -19,7 +19,9 @@ import me.jincrates.ecommerce.order.domain.entity.Product;
 import me.jincrates.ecommerce.order.domain.valueobject.OrderItemId;
 import me.jincrates.ecommerce.order.domain.valueobject.StreetAddress;
 import me.jincrates.ecommerce.order.domain.valueobject.TrackingId;
+import org.springframework.stereotype.Component;
 
+@Component
 public class OrderDataAccessMapper {
 
     public OrderEntity toOrderEntity(Order order) {

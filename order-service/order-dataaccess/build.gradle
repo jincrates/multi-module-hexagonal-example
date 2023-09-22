@@ -1,8 +1,9 @@
 dependencies {
     implementation project(':order-service:order-domain:order-application-service')
-    //TODO: 이거 의존해야하는건가?
     implementation project(':order-service:order-domain:order-domain-core')
     implementation project(':common:common-domain')
+    implementation project(':infra:outbox')
+    implementation project(':infra:saga')
 
     // h2 database
     runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
