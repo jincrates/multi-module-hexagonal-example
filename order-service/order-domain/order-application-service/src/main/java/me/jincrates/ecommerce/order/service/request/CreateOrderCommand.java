@@ -5,7 +5,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 import me.jincrates.ecommerce.order.domain.OrderAddress;
-import me.jincrates.ecommerce.order.domain.entity.OrderItem;
 
 public record CreateOrderCommand(
     @NotNull
@@ -15,9 +14,20 @@ public record CreateOrderCommand(
     @NotNull
     BigDecimal price,
     @NotNull
-    List<OrderItem>items,
+    List<OrderItem> items,
     @NotNull
     OrderAddress address
 ) {
+    public record OrderItem(
+        @NotNull
+         UUID productId,
+        @NotNull
+        Integer quantity,
+        @NotNull
+        BigDecimal price,
+        @NotNull
+        BigDecimal subTotal
+    ) {
 
+    }
 }
