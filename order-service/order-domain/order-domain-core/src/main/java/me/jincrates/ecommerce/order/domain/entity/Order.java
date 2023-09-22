@@ -15,14 +15,17 @@ import me.jincrates.ecommerce.order.domain.valueobject.StreetAddress;
 import me.jincrates.ecommerce.order.domain.valueobject.TrackingId;
 
 public class Order extends AggregateRoot<OrderId> {
-    private final CustomerId customerId;
-    private final StoreId storeId;
-    private final StreetAddress deliveryAddress;
-    private final Money price;
-    private final List<OrderItem> items;
+    private CustomerId customerId;
+    private StoreId storeId;
+    private StreetAddress deliveryAddress;
+    private Money price;
+    private List<OrderItem> items;
     private TrackingId trackingId;
     private OrderStatus orderStatus;
     private List<String> failureMessages;
+
+    private Order() {
+    }
 
     @Builder
     private Order(OrderId orderId, CustomerId customerId, StoreId storeId, StreetAddress deliveryAddress, Money price,

@@ -1,5 +1,7 @@
 package me.jincrates.ecommerce.order.application.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "주문 서비스", description = "주문 생성/조회 API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class OrderRestController {
     private final OrderApplicationUseCase orderApplicationUseCase;
 
+    @Operation(summary = "주문 생성")
     @PostMapping
     public ResponseEntity<CreateOrderResponse> createOrder(
         @RequestBody CreateOrderCommand createOrderCommand
@@ -34,9 +38,10 @@ public class OrderRestController {
         return ResponseEntity.ok(createOrderResponse);
     }
 
+    @Operation(summary = "주문 조회")
     @GetMapping("/{trackingId}")
     public ResponseEntity<TrackOrderResponse> getOrderByTrackingId(
-        @PathVariable UUID trackingId
+        @PathVariable(name = "trackingId") UUID trackingId
     ) {
         TrackOrderResponse trackOrderResponse = orderApplicationUseCase.trackOrder(
             new TrackOrderQuery(trackingId));

@@ -8,6 +8,9 @@ public class Product extends BaseEntity<ProductId> {
     private String name;
     private Money price;
 
+    private Product() {
+    }
+
     public Product(String name, Money price) {
         this.name = name;
         this.price = price;

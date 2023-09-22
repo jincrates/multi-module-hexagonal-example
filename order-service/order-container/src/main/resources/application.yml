@@ -20,3 +20,12 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000
     defer-datasource-initialization: true
+
+# swagger 설정
+springdoc:
+  swagger-ui:
+    use-root-path: true
+    path: /api
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs

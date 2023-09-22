@@ -8,10 +8,13 @@ import me.jincrates.ecommerce.order.domain.valueobject.OrderItemId;
 
 public class OrderItem extends BaseEntity<OrderItemId> {
     private OrderId orderId;
-    private final Product product;
-    private final int quantity;
-    private final Money price;
-    private final Money subTotal;
+    private Product product;
+    private int quantity;
+    private Money price;
+    private Money subTotal;
+
+    private OrderItem() {
+    }
 
     @Builder
     private OrderItem(OrderItemId orderItemId, OrderId orderId, Product product, int quantity, Money price, Money subTotal) {
