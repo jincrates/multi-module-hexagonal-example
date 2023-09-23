@@ -8,12 +8,16 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.Objects;
 import java.util.UUID;
+
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "order_address")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderAddressEntity {
 
     @Id

@@ -10,13 +10,17 @@ import jakarta.persistence.Table;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
+
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
 @Table(name = "order_items")
 @IdClass(OrderItemEntityId.class)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItemEntity {
     @Id
     private Long id;

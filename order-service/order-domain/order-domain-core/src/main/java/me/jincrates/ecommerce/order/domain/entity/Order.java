@@ -44,6 +44,7 @@ public class Order extends AggregateRoot<OrderId> {
     public void initializeOrder() {
         setId(new OrderId(UUID.randomUUID()));
         trackingId = new TrackingId(UUID.randomUUID());
+        orderStatus = OrderStatus.PENDING;
         initializeOrderItems();
     }
 
@@ -150,7 +151,7 @@ public class Order extends AggregateRoot<OrderId> {
     private void validateItemPrice(OrderItem orderItem) {
         if (!orderItem.isPriceValid()) {
             throw new OrderDomainException("주문 항목의 가격: " + orderItem.getPrice().getAmount() +
-                " 이 해당 상품에 대해 유효하지 않습니다. " + orderItem.getProduct().getId().getValue());
+                "이 해당 상품에 대해 유효하지 않습니다. " + orderItem.getProduct().getId().getValue());
         }
     }
 

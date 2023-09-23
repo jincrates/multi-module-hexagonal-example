@@ -2,9 +2,13 @@ package me.jincrates.ecommerce.order.dataaccess.order.entity;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItemEntityId implements Serializable {
 
     private Long id;

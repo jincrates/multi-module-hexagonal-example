@@ -51,6 +51,6 @@ public record Money(
     }
 
     private BigDecimal setScale(BigDecimal input) {
-        return input.setScale(2, RoundingMode.HALF_EVEN);
+        return input.setScale(0, RoundingMode.HALF_EVEN);
     }
 }
