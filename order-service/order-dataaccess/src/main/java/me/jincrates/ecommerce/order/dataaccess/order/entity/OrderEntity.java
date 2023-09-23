@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +29,7 @@ public class OrderEntity {
     private UUID customerId;
     private UUID storeId;
     private UUID trackingId;
-    private BigDecimal price;
+    private BigInteger price;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
     private String failureMessages;
@@ -42,7 +42,7 @@ public class OrderEntity {
 
     @Builder
     private OrderEntity(UUID id, UUID customerId, UUID storeId, UUID trackingId,
-        BigDecimal price, OrderStatus orderStatus, String failureMessages,
+        BigInteger price, OrderStatus orderStatus, String failureMessages,
         OrderAddressEntity address, List<OrderItemEntity> items) {
         this.id = id;
         this.customerId = customerId;

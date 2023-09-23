@@ -8,7 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,7 +25,7 @@ public class StoreEntity {
     private String storeName;
     private Boolean storeActive;
     private String productName;
-    private BigDecimal productPrice;
+    private BigInteger productPrice;
     private Boolean productAvailable;
 
     @Override

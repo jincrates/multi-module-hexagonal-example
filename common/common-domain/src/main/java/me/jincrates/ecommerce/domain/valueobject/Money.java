@@ -1,20 +1,21 @@
 package me.jincrates.ecommerce.domain.valueobject;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Objects;
 
 public record Money(
-    BigDecimal amount
+    BigInteger amount
 ) {
-    public static final Money ZERO = new Money(BigDecimal.ZERO);
+    public static final Money ZERO = new Money(BigInteger.ZERO);
 
-    public Money(BigDecimal amount) {
+    public Money(BigInteger amount) {
         this.amount = amount;
     }
 
     public boolean isGreaterThanZero() {
-        return this.amount != null && this.amount.compareTo(BigDecimal.ZERO) > 0;
+        return this.amount != null && this.amount.compareTo(BigInteger.ZERO) > 0;
     }
 
     public boolean isGreaterThan(Money money) {
@@ -22,18 +23,18 @@ public record Money(
     }
 
     public Money add(Money money) {
-        return new Money(setScale(this.amount.add(money.getAmount())));
+        return new Money(this.amount.add(money.getAmount()));
     }
 
     public Money subtract(Money money) {
-        return new Money(setScale(this.amount.subtract(money.getAmount())));
+        return new Money(this.amount.subtract(money.getAmount()));
     }
 
     public Money multiply(int multiplier) {
-        return new Money(setScale(this.amount.multiply(new BigDecimal(multiplier))));
+        return new Money(this.amount.multiply(new BigInteger(String.valueOf(multiplier))));
     }
 
-    public BigDecimal getAmount() {
+    public BigInteger getAmount() {
         return amount;
     }
 
@@ -50,7 +51,7 @@ public record Money(
         return Objects.hash(amount);
     }
 
-    private BigDecimal setScale(BigDecimal input) {
-        return input.setScale(0, RoundingMode.HALF_EVEN);
-    }
+//    private BigDecimal setScale(BigInteger input) {
+//        return input.setScale(0, RoundingMode.HALF_EVEN);
+//    }
 }

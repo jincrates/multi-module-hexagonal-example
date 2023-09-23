@@ -1,6 +1,6 @@
 package me.jincrates.ecommerce.order.dataaccess.store.adapter;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

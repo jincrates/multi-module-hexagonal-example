@@ -7,7 +7,7 @@ import jakarta.persistence.IdClass;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,13 +30,13 @@ public class OrderItemEntity {
     private OrderEntity order;
 
     private UUID productId;
-    private BigDecimal price;
+    private BigInteger price;
     private Integer quantity;
-    private BigDecimal subTotal;
+    private BigInteger subTotal;
 
     @Builder
-    private OrderItemEntity(Long id, OrderEntity order, UUID productId, BigDecimal price,
-        Integer quantity, BigDecimal subTotal) {
+    private OrderItemEntity(Long id, OrderEntity order, UUID productId, BigInteger price,
+        Integer quantity, BigInteger subTotal) {
         this.id = id;
         this.order = order;
         this.productId = productId;

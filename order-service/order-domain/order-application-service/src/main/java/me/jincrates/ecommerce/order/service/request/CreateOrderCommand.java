@@ -1,7 +1,7 @@
 package me.jincrates.ecommerce.order.service.request;
 
 import jakarta.validation.constraints.NotNull;
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 import java.util.UUID;
 import me.jincrates.ecommerce.order.domain.OrderAddress;
@@ -12,7 +12,7 @@ public record CreateOrderCommand(
     @NotNull
     UUID storeId,
     @NotNull
-    BigDecimal price,
+    BigInteger price,
     @NotNull
     List<OrderItem> items,
     @NotNull
@@ -24,9 +24,9 @@ public record CreateOrderCommand(
         @NotNull
         Integer quantity,
         @NotNull
-        BigDecimal price,
+        BigInteger price,
         @NotNull
-        BigDecimal subTotal
+        BigInteger subTotal
     ) {
 
     }
