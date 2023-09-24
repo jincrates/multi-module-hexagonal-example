@@ -1,6 +1,6 @@
 package me.jincrates.ecommerce.order.dataaccess.order.mapper;
 
-import static me.jincrates.ecommerce.domain.DomainConstants.FAILURE_MESSAGE_DELIMITER;
+import static me.jincrates.ecommerce.domain.DomainConstants.JOINING_MESSAGE_DELIMITER;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +35,7 @@ public class OrderDataAccessMapper {
             .items(toOrderItemEntities(order.getItems()))
             .orderStatus(order.getOrderStatus())
             .failureMessages(order.getFailureMessages() != null ?
-                String.join(FAILURE_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
+                String.join(JOINING_MESSAGE_DELIMITER, order.getFailureMessages()) : "")
             .build();
         orderEntity.getAddress().setOrder(orderEntity);
         orderEntity.getItems().forEach(orderItemEntity -> orderItemEntity.setOrder(orderEntity));

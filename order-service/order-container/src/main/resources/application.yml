@@ -21,6 +21,10 @@ spring:
         default_batch_fetch_size: 1000
     defer-datasource-initialization: true
 
+order-service:
+  outbox-scheduler-fixed-rate: 10000
+  outbox-scheduler-initial-delay: 10000
+
 # swagger 설정
 springdoc:
   swagger-ui:
