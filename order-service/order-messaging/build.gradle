@@ -1,3 +1,9 @@
 dependencies {
     implementation project(':order-service:order-domain:order-application-service')
+    implementation project(':infra:kafka:kafka-producer')
+    implementation project(':infra:kafka:kafka-consumer')
+    implementation project(':infra:outbox')
+    implementation project(':infra:saga')
+
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
 }
