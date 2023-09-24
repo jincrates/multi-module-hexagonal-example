@@ -23,21 +23,21 @@ import static me.jincrates.ecommerce.infra.saga.SagaConstants.ORDER_SAGA_NAME;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class PaymentOutboxHelper {
+public class PaymentOutboxSchedulerHelper {
 
     private final PaymentOutboxPort paymentOutboxPort;
     private final ObjectMapper objectMapper;
 
     @Transactional(readOnly = true)
     public Optional<List<OrderPaymentOutboxMessage>> getPaymentOutboxMessageByOutboxStatusAndSagaStatus(
-        OutboxStatus outboxStatus, SagaStatus... sagaStatus
+            OutboxStatus outboxStatus, SagaStatus... sagaStatus
     ) {
         return paymentOutboxPort.findByTypeAndOutboxStatusAndSagaStatus(ORDER_SAGA_NAME, outboxStatus, sagaStatus);
     }
 
     @Transactional(readOnly = true)
     public Optional<OrderPaymentOutboxMessage> getPaymentOutboxMessageBySagaIdAndSagaStatus(
-        UUID sagaId, SagaStatus... sagaStatus
+            UUID sagaId, SagaStatus... sagaStatus
     ) {
         return paymentOutboxPort.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId, sagaStatus);
     }

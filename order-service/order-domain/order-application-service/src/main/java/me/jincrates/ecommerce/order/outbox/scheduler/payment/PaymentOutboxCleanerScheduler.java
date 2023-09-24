@@ -9,7 +9,6 @@ import me.jincrates.ecommerce.order.outbox.model.OrderPaymentOutboxMessage;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -19,12 +18,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PaymentOutboxCleanerScheduler implements OutboxScheduler {
 
-    private final PaymentOutboxHelper paymentOutboxHelper;
+    private final PaymentOutboxSchedulerHelper paymentOutboxSchedulerHelper;
 
     @Override
     @Scheduled(cron = "@midnight")
     public void processOutboxMessage() {
-        Optional<List<OrderPaymentOutboxMessage>> outboxMessagesResponse = paymentOutboxHelper
+        Optional<List<OrderPaymentOutboxMessage>> outboxMessagesResponse = paymentOutboxSchedulerHelper
                 .getPaymentOutboxMessageByOutboxStatusAndSagaStatus(
                         OutboxStatus.COMPLETED,
                         SagaStatus.SUCCEEDED,
@@ -39,7 +38,7 @@ public class PaymentOutboxCleanerScheduler implements OutboxScheduler {
                     outboxMessages.stream()
                             .map(OrderPaymentOutboxMessage::getPayload)
                             .collect(Collectors.joining("\n")));
-            paymentOutboxHelper.deletePaymentOutboxMessageByOutboxStatusAndSagaStatus(
+            paymentOutboxSchedulerHelper.deletePaymentOutboxMessageByOutboxStatusAndSagaStatus(
                     OutboxStatus.COMPLETED,
                     SagaStatus.SUCCEEDED,
                     SagaStatus.FAILED,

@@ -6,4 +6,5 @@ dependencies {
     implementation project(':infra:saga')
 
     implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
 }

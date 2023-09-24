@@ -22,7 +22,7 @@ import static me.jincrates.ecommerce.domain.DomainConstants.JOINING_MESSAGE_DELI
 @RequiredArgsConstructor
 public class PaymentOutboxScheduler implements OutboxScheduler {
 
-    private final PaymentOutboxHelper paymentOutboxHelper;
+    private final PaymentOutboxSchedulerHelper paymentOutboxSchedulerHelper;
     private final PaymentRequestMessagePublisher paymentRequestMessagePublisher;
 
     @Override
@@ -30,7 +30,7 @@ public class PaymentOutboxScheduler implements OutboxScheduler {
     @Scheduled(fixedDelayString = "${order-service.outbox-scheduler-fixed-rate}",
             initialDelayString = "${order-service.outbox-scheduler-initial-delay}")
     public void processOutboxMessage() {
-        Optional<List<OrderPaymentOutboxMessage>> outboxMessagesResponse = paymentOutboxHelper.getPaymentOutboxMessageByOutboxStatusAndSagaStatus(
+        Optional<List<OrderPaymentOutboxMessage>> outboxMessagesResponse = paymentOutboxSchedulerHelper.getPaymentOutboxMessageByOutboxStatusAndSagaStatus(
                 OutboxStatus.STARTED,
                 SagaStatus.STARTED,
                 SagaStatus.COMPENSATING
@@ -52,7 +52,7 @@ public class PaymentOutboxScheduler implements OutboxScheduler {
 
     private void updateOutboxStatus(OrderPaymentOutboxMessage orderPaymentOutboxMessage, OutboxStatus outboxStatus) {
         orderPaymentOutboxMessage.setOutboxStatus(outboxStatus);
-        paymentOutboxHelper.save(orderPaymentOutboxMessage);
+        paymentOutboxSchedulerHelper.save(orderPaymentOutboxMessage);
         log.info("OrderPaymentOutboxMessage is updated with outbox status: {}", outboxStatus.name());
     }
 }
