@@ -1,6 +1,5 @@
 package me.jincrates.ecommerce.order.service.handler.helper;
 
-import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,40 +30,38 @@ public class OrderCreateHelper {
 
     @Transactional
     public OrderCreatedEvent persistOrder(CreateOrderCommand createOrderCommand) {
-        checkCustomer(createOrderCommand.customerId());
-        Store store = checkStore(createOrderCommand);
+        getVerifiedCustomer(createOrderCommand.customerId());
+        Store store = getVerifiedStore(createOrderCommand);
         Order order = orderDataMapper.toOrder(createOrderCommand);
-        OrderCreatedEvent orderCreatedEvent = orderDomainUseCase.validateAndInitiateOrder(order, store);
+        OrderCreatedEvent orderCreatedEvent = orderDomainUseCase.validateAndInitiateOrder(order,
+            store);
         saveOrder(order);
         log.info("Order is created with id: {}", orderCreatedEvent.getOrder().getId().getValue());
         return orderCreatedEvent;
     }
 
-    private void checkCustomer(UUID customerId) {
-        Optional<Customer> customer = customerPort.findCustomer(customerId);
-        if (customer.isEmpty()) {
-            log.warn("Could not find customer with customer id: {}", customerId);
-            throw new OrderDomainException("Could not find customer with customer id: " + customerId);
-        }
+    private Customer getVerifiedCustomer(UUID customerId) {
+        return customerPort.findCustomer(customerId)
+            .orElseThrow(() -> {
+                log.warn("Could not find customer with customer id: {}", customerId);
+                return new OrderDomainException(
+                    "Could not find customer with customer id: " + customerId);
+            });
     }
 
-    private Store checkStore(CreateOrderCommand createOrderCommand) {
+    private Store getVerifiedStore(CreateOrderCommand createOrderCommand) {
         Store store = orderDataMapper.toStore(createOrderCommand);
-        Optional<Store> optionalStore = storePort.findStoreInformation(store);
-        if (optionalStore.isEmpty()) {
-            log.warn("Could not find store with store id: {}", createOrderCommand.storeId());
-            throw new OrderDomainException("Could not find store with store id: " + createOrderCommand.storeId());
-        }
-        return optionalStore.get();
+        return storePort.findStoreInformation(store)
+            .orElseThrow(() -> {
+                log.warn("Could not find store with store id: {}", createOrderCommand.storeId());
+                return new OrderDomainException(
+                    "Could not find store with store id: " + createOrderCommand.storeId());
+            });
     }
 
     private Order saveOrder(Order order) {
         Order savedOrder = orderPort.save(order);
-        if (savedOrder == null) {
-            log.error("Could not save order!");
-            throw new OrderDomainException("Could not save order!");
-        }
-        log.info("Order ist saved with id: {}", savedOrder.getId().getValue());
+        log.info("Order is saved with id: {}", savedOrder.getId().getValue());
         return savedOrder;
     }
 }

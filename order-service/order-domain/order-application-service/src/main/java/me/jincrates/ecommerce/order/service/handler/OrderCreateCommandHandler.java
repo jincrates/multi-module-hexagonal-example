@@ -27,17 +27,24 @@ public class OrderCreateCommandHandler {
         OrderCreatedEvent orderCreatedEvent = orderCreateHelper.persistOrder(createOrderCommand);
         log.info("Order is created with id: {}", orderCreatedEvent.getOrder().getId().getValue());
 
-        CreateOrderResponse createOrderResponse = orderDataMapper.toCreateOrderResponse(orderCreatedEvent.getOrder(),
+        CreateOrderResponse createOrderResponse = orderDataMapper.toCreateOrderResponse(
+            orderCreatedEvent.getOrder(),
             "Order created successfully");
 
-        paymentOutboxHelper.savePaymentOutboxMessage(orderDataMapper.toOrderPaymentEventPayload(orderCreatedEvent),
+        savePaymentOutboxMessage(orderCreatedEvent);
+
+        log.info("Returning CreateOrderResponse with order id: {}",
+            orderCreatedEvent.getOrder().getId());
+
+        return createOrderResponse;
+    }
+
+    private void savePaymentOutboxMessage(OrderCreatedEvent orderCreatedEvent) {
+        paymentOutboxHelper.savePaymentOutboxMessage(
+            orderDataMapper.toOrderPaymentEventPayload(orderCreatedEvent),
             orderCreatedEvent.getOrder().getOrderStatus(),
             orderSagaHelper.toSagaStatus(orderCreatedEvent.getOrder().getOrderStatus()),
             OutboxStatus.STARTED,
             UUID.randomUUID());
-
-        log.info("Returning CreateOrderResponse with order id: {}", orderCreatedEvent.getOrder().getId());
-
-        return createOrderResponse;
     }
 }

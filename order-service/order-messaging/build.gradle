@@ -1,5 +1,7 @@
 dependencies {
+    implementation project(':common:common-domain')
     implementation project(':order-service:order-domain:order-application-service')
+    implementation project(':order-service:order-domain:order-domain-core')
     implementation project(':infra:kafka:kafka-producer')
     implementation project(':infra:kafka:kafka-consumer')
     implementation project(':infra:outbox')

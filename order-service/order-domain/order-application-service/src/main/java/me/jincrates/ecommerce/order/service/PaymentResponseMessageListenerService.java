@@ -21,7 +21,8 @@ public class PaymentResponseMessageListenerService implements PaymentResponseMes
     @Override
     public void paymentCompleted(PaymentResponse paymentResponse) {
         orderPaymentSagaHandler.process(paymentResponse);
-        log.info("Order Payment Saga process operation is completed for order id: {}", paymentResponse.orderId());
+        log.info("Order Payment Saga process operation is completed for order id: {}",
+            paymentResponse.orderId());
     }
 
     @Override
