@@ -1,5 +1,6 @@
 package me.jincrates.ecommerce.order.domain.entity;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
@@ -15,6 +16,7 @@ import me.jincrates.ecommerce.order.domain.valueobject.StreetAddress;
 import me.jincrates.ecommerce.order.domain.valueobject.TrackingId;
 
 public class Order extends AggregateRoot<OrderId> {
+
     private CustomerId customerId;
     private StoreId storeId;
     private StreetAddress deliveryAddress;
@@ -28,8 +30,10 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     @Builder
-    private Order(OrderId orderId, CustomerId customerId, StoreId storeId, StreetAddress deliveryAddress, Money price,
-        List<OrderItem> items, TrackingId trackingId, OrderStatus orderStatus, List<String> failureMessages) {
+    private Order(OrderId orderId, CustomerId customerId, StoreId storeId,
+        StreetAddress deliveryAddress, Money price,
+        List<OrderItem> items, TrackingId trackingId, OrderStatus orderStatus,
+        List<String> failureMessages) {
         super.setId(orderId);
         this.customerId = customerId;
         this.storeId = storeId;
@@ -55,23 +59,17 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     public void pay() {
-        if (orderStatus != OrderStatus.PENDING) {
-            throw new OrderDomainException("결제를 할 수 없는 주문 상태입니다!");
-        }
+        assertStatus(OrderStatus.PENDING, "결제를 할 수 없는 주문 상태입니다!");
         orderStatus = OrderStatus.PAID;
     }
 
     public void approve() {
-        if (orderStatus != OrderStatus.PAID) {
-            throw new OrderDomainException("승인을 할 수 없는 주문 상태입니다!");
-        }
+        assertStatus(OrderStatus.PAID, "승인을 할 수 없는 주문 상태입니다!");
         orderStatus = OrderStatus.APPROVED;
     }
 
     public void initCancel(List<String> failureMessages) {
-        if (orderStatus != OrderStatus.PAID) {
-            throw new OrderDomainException("취소 초기화를 할 수 없는 주문 상태입니다!");
-        }
+        assertStatus(OrderStatus.PAID, "취소 초기화를 할 수 없는 주문 상태입니다!");
         orderStatus = OrderStatus.CANCELLING;
         updateFailureMessages(failureMessages);
     }
@@ -102,7 +100,7 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     public List<OrderItem> getItems() {
-        return items;
+        return Collections.unmodifiableList(items);  // 방어적 복사
     }
 
     public TrackingId getTrackingId() {
@@ -114,12 +112,12 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     public List<String> getFailureMessages() {
-        return failureMessages;
+        return Collections.unmodifiableList(failureMessages);  // 방어적 복사
     }
 
     private void initializeOrderItems() {
         long itemId = 1;
-        for (OrderItem orderItem: items) {
+        for (OrderItem orderItem : items) {
             orderItem.initializeOrderItem(super.getId(), new OrderItemId(itemId++));
         }
     }
@@ -157,10 +155,17 @@ public class Order extends AggregateRoot<OrderId> {
 
     private void updateFailureMessages(List<String> failureMessages) {
         if (this.failureMessages != null && failureMessages != null) {
-            this.failureMessages.addAll(failureMessages.stream().filter(message -> !message.isEmpty()).toList());
+            this.failureMessages.addAll(
+                failureMessages.stream().filter(message -> !message.isEmpty()).toList());
         }
         if (this.failureMessages == null) {
             this.failureMessages = failureMessages;
+        }
+    }
+
+    private void assertStatus(OrderStatus expected, String errorMessage) {
+        if (orderStatus != expected) {
+            throw new OrderDomainException(errorMessage);
         }
     }
 }
