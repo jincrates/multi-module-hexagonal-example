@@ -4,6 +4,7 @@ import static me.jincrates.ecommerce.infra.saga.SagaConstants.ORDER_SAGA_NAME;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +50,12 @@ public class PaymentOutboxHelper {
         }
         log.info("OrderPaymentOutboxMessage saved with outbox id: {}", orderPaymentOutboxMessage.getId());
     }
+
+    @Transactional(readOnly = true)
+    public Optional<OrderPaymentOutboxMessage> getPaymentOutboxMessageBySagaIdAndSagaStatus(UUID sagaId, SagaStatus... sagaStatus) {
+        return paymentOutboxPort.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId, sagaStatus);
+    }
+
 
     private String createPayload(OrderPaymentEventPayload paymentEventPayload) {
         try {

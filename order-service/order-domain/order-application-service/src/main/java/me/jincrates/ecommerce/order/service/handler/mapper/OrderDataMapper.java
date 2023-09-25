@@ -2,21 +2,24 @@ package me.jincrates.ecommerce.order.service.handler.mapper;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import me.jincrates.ecommerce.domain.valueobject.CustomerId;
 import me.jincrates.ecommerce.domain.valueobject.Money;
 import me.jincrates.ecommerce.domain.valueobject.PaymentOrderStatus;
 import me.jincrates.ecommerce.domain.valueobject.ProductId;
 import me.jincrates.ecommerce.domain.valueobject.StoreId;
-import me.jincrates.ecommerce.order.domain.OrderAddress;
+import me.jincrates.ecommerce.domain.valueobject.StoreOrderStatus;
 import me.jincrates.ecommerce.order.domain.entity.Order;
 import me.jincrates.ecommerce.order.domain.entity.OrderItem;
 import me.jincrates.ecommerce.order.domain.entity.Product;
 import me.jincrates.ecommerce.order.domain.entity.Store;
 import me.jincrates.ecommerce.order.domain.event.OrderCreatedEvent;
+import me.jincrates.ecommerce.order.domain.event.OrderPaidEvent;
 import me.jincrates.ecommerce.order.domain.valueobject.StreetAddress;
+import me.jincrates.ecommerce.order.outbox.model.OrderApprovalEventPayload;
+import me.jincrates.ecommerce.order.outbox.model.OrderApprovalEventPayload.OrderApprovalEventProduct;
 import me.jincrates.ecommerce.order.outbox.model.OrderPaymentEventPayload;
 import me.jincrates.ecommerce.order.service.request.CreateOrderCommand;
+import me.jincrates.ecommerce.order.service.request.CreateOrderCommand.OrderAddress;
 import me.jincrates.ecommerce.order.service.response.CreateOrderResponse;
 import me.jincrates.ecommerce.order.service.response.TrackOrderResponse;
 import org.springframework.stereotype.Component;
@@ -72,14 +75,13 @@ public class OrderDataMapper {
 
     private List<OrderItem> toOrderItemEntities(List<CreateOrderCommand.OrderItem> orderItems) {
         return orderItems.stream()
-            .map(orderItem ->
-                OrderItem.builder()
+            .map(orderItem -> OrderItem.builder()
                     .product(new Product(new ProductId(orderItem.productId())))
                     .price(new Money(orderItem.price()))
                     .quantity(orderItem.quantity())
                     .subTotal(new Money(orderItem.subTotal()))
                     .build())
-            .collect(Collectors.toList());
+            .toList();
     }
 
     public Store toStore(CreateOrderCommand createOrderCommand) {
@@ -87,7 +89,22 @@ public class OrderDataMapper {
             .storeId(new StoreId(createOrderCommand.customerId()))
             .products(createOrderCommand.items().stream()
                 .map(orderItem -> new Product(new ProductId(orderItem.productId())))
-                .collect(Collectors.toList()))
+                .toList())
             .build();
+    }
+
+    public OrderApprovalEventPayload toOrderApprovalEventPayload(OrderPaidEvent orderPaidEvent) {
+        return new OrderApprovalEventPayload(
+            orderPaidEvent.getOrder().getId().getValue().toString(),
+            orderPaidEvent.getOrder().getStoreId().getValue().toString(),
+            StoreOrderStatus.PAID.name(),
+            orderPaidEvent.getOrder().getPrice().getAmount(),
+            orderPaidEvent.getCreatedAt(),
+            orderPaidEvent.getOrder().getItems().stream()
+                .map(orderItem -> new OrderApprovalEventProduct(
+                    orderItem.getProduct().getId().getValue().toString(),
+                    orderItem.getQuantity()))
+                .toList()
+        );
     }
 }

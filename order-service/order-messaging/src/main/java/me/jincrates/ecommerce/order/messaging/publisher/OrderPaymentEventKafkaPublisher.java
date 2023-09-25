@@ -1,5 +1,6 @@
 package me.jincrates.ecommerce.order.messaging.publisher;
 
+import java.util.function.BiConsumer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.jincrates.ecommerce.infra.kafka.producer.KafkaMessageHelper;
@@ -9,10 +10,8 @@ import me.jincrates.ecommerce.order.config.OrderServiceConfigData;
 import me.jincrates.ecommerce.order.messaging.mapper.OrderMessagingDataMapper;
 import me.jincrates.ecommerce.order.outbox.model.OrderPaymentEventPayload;
 import me.jincrates.ecommerce.order.outbox.model.OrderPaymentOutboxMessage;
-import me.jincrates.ecommerce.order.port.output.message.publisher.payment.PaymentRequestMessagePublisher;
+import me.jincrates.ecommerce.order.port.output.message.publisher.PaymentRequestMessagePublisher;
 import org.springframework.stereotype.Component;
-
-import java.util.function.BiConsumer;
 
 @Slf4j
 @Component
