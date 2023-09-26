@@ -2,7 +2,7 @@ package me.jincrates.ecommerce.order.service.response;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import me.jincrates.ecommerce.domain.valueobject.PaymentStatus;
 
@@ -19,6 +19,6 @@ public record PaymentResponse(
 ) {
 
     public PaymentResponse {
-        failureMessages = failureMessages == null ? Collections.emptyList() : failureMessages;
+        failureMessages = failureMessages == null ? new ArrayList<>() : failureMessages;
     }
 }

@@ -2,7 +2,7 @@ package me.jincrates.ecommerce.order.dataaccess.order.mapper;
 
 import static me.jincrates.ecommerce.domain.DomainConstants.JOINING_MESSAGE_DELIMITER;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import me.jincrates.ecommerce.domain.valueobject.CustomerId;
 import me.jincrates.ecommerce.domain.valueobject.Money;
@@ -53,7 +53,7 @@ public class OrderDataAccessMapper {
             .trackingId(new TrackingId(orderEntity.getTrackingId()))
             .orderStatus(orderEntity.getOrderStatus())
             .failureMessages(orderEntity.getFailureMessages().isEmpty()
-                ? Collections.emptyList()
+                ? new ArrayList<>()
                 : List.of(orderEntity.getFailureMessages()))
             .build();
     }

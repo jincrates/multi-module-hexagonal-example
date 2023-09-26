@@ -9,7 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -39,7 +39,7 @@ public class OrderEntity {
     private OrderAddressEntity address;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItemEntity> items = Collections.emptyList();
+    private List<OrderItemEntity> items = new ArrayList<>();
 
     @Builder
     private OrderEntity(UUID id, UUID customerId, UUID storeId, UUID trackingId,

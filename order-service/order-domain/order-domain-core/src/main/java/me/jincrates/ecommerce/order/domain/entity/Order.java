@@ -1,6 +1,5 @@
 package me.jincrates.ecommerce.order.domain.entity;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import lombok.Builder;
@@ -100,7 +99,8 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     public List<OrderItem> getItems() {
-        return Collections.unmodifiableList(items);  // 방어적 복사
+        return items;
+        //return Collections.unmodifiableList(items);  // 방어적 복사
     }
 
     public TrackingId getTrackingId() {
@@ -112,7 +112,8 @@ public class Order extends AggregateRoot<OrderId> {
     }
 
     public List<String> getFailureMessages() {
-        return Collections.unmodifiableList(failureMessages);  // 방어적 복사
+        return failureMessages;
+        //return Collections.unmodifiableList(failureMessages);  // 방어적 복사
     }
 
     private void initializeOrderItems() {

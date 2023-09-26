@@ -48,7 +48,7 @@ public class OrderCreateHelper {
                     "Could not find customer with customer id: " + customerId);
             });
     }
-    
+
     private Store getVerifiedStore(CreateOrderCommand createOrderCommand) {
         Store store = orderDataMapper.toStore(createOrderCommand);
         return storePort.findStoreInformation(store)
