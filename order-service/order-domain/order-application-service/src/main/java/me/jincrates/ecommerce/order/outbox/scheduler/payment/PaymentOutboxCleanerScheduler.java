@@ -1,5 +1,8 @@
 package me.jincrates.ecommerce.order.outbox.scheduler.payment;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.jincrates.ecommerce.infra.outbox.OutboxScheduler;
@@ -8,10 +11,6 @@ import me.jincrates.ecommerce.infra.saga.SagaStatus;
 import me.jincrates.ecommerce.order.outbox.model.OrderPaymentOutboxMessage;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -23,28 +22,32 @@ public class PaymentOutboxCleanerScheduler implements OutboxScheduler {
     @Override
     @Scheduled(cron = "@midnight")
     public void processOutboxMessage() {
-        Optional<List<OrderPaymentOutboxMessage>> outboxMessagesResponse = paymentOutboxSchedulerHelper
-                .getPaymentOutboxMessageByOutboxStatusAndSagaStatus(
-                        OutboxStatus.COMPLETED,
-                        SagaStatus.SUCCEEDED,
-                        SagaStatus.FAILED,
-                        SagaStatus.COMPENSATED
-                );
+        List<OrderPaymentOutboxMessage> outboxMessages = paymentOutboxSchedulerHelper
+            .getPaymentOutboxMessageByOutboxStatusAndSagaStatus(
+                OutboxStatus.COMPLETED,
+                SagaStatus.SUCCEEDED,
+                SagaStatus.FAILED,
+                SagaStatus.COMPENSATED
+            )
+            .orElse(Collections.emptyList());
 
-        if (outboxMessagesResponse.isPresent() && outboxMessagesResponse.get().size() > 0) {
-            List<OrderPaymentOutboxMessage> outboxMessages = outboxMessagesResponse.get();
+        if (!outboxMessages.isEmpty()) {
             log.info("Received {} OrderPaymentOutboxMessage for clean-up. The payloads: {}",
-                    outboxMessages.size(),
-                    outboxMessages.stream()
-                            .map(OrderPaymentOutboxMessage::getPayload)
-                            .collect(Collectors.joining("\n")));
-            paymentOutboxSchedulerHelper.deletePaymentOutboxMessageByOutboxStatusAndSagaStatus(
-                    OutboxStatus.COMPLETED,
-                    SagaStatus.SUCCEEDED,
-                    SagaStatus.FAILED,
-                    SagaStatus.COMPENSATED
-            );
+                outboxMessages.size(),
+                outboxMessages.stream()
+                    .map(OrderPaymentOutboxMessage::getPayload)
+                    .collect(Collectors.joining("\n")));
+            deletePaymentOutboxMessages();
             log.info("{} OrderPaymentOutboxMessage deleted!", outboxMessages.size());
         }
+    }
+
+    private void deletePaymentOutboxMessages() {
+        paymentOutboxSchedulerHelper.deletePaymentOutboxMessageByOutboxStatusAndSagaStatus(
+            OutboxStatus.COMPLETED,
+            SagaStatus.SUCCEEDED,
+            SagaStatus.FAILED,
+            SagaStatus.COMPENSATED
+        );
     }
 }

@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.jincrates.ecommerce.infra.outbox.OutboxStatus;
@@ -26,33 +25,37 @@ public class ApprovalOutboxAdapter implements ApprovalOutboxPort {
 
     @Override
     public OrderApprovalOutboxMessage save(OrderApprovalOutboxMessage orderApprovalOutboxMessage) {
-        return approvalOutboxDataAccessMapper.toMessage(
-            approvalOutboxJpaRepository.save(
-                approvalOutboxDataAccessMapper.toEntity(orderApprovalOutboxMessage)
-            )
+        return approvalOutboxDataAccessMapper.toMessage(approvalOutboxJpaRepository.save(
+            approvalOutboxDataAccessMapper.toEntity(orderApprovalOutboxMessage))
         );
     }
 
     @Override
-    public Optional<List<OrderApprovalOutboxMessage>> findByTypeAndOutboxStatusAndSagaStatus(String type, OutboxStatus outboxStatus, SagaStatus... sagaStatus) {
+    public Optional<List<OrderApprovalOutboxMessage>> findByTypeAndOutboxStatusAndSagaStatus(
+        String type, OutboxStatus outboxStatus, SagaStatus... sagaStatus) {
         return Optional.of(
-            approvalOutboxJpaRepository.findByTypeAndOutboxStatusAndSagaStatusIn(type, outboxStatus, Arrays.asList(sagaStatus))
-                .orElseThrow(() -> new ApprovalOutboxNotFoundException("Approval outbox object could be found for saga type " + type))
+            approvalOutboxJpaRepository.findByTypeAndOutboxStatusAndSagaStatusIn(type, outboxStatus,
+                    Arrays.asList(sagaStatus))
+                .orElseThrow(() -> new ApprovalOutboxNotFoundException(
+                    "Approval outbox object could be found for saga type " + type))
                 .stream()
                 .map(approvalOutboxDataAccessMapper::toMessage)
-                .collect(Collectors.toList())
+                .toList()
         );
     }
 
     @Override
     public Optional<OrderApprovalOutboxMessage> findByTypeAndSagaIdAndSagaStatus(String type,
         UUID sagaId, SagaStatus... sagaStatus) {
-        return approvalOutboxJpaRepository.findByTypeAndSagaIdAndSagaStatusIn(type, sagaId, Arrays.asList(sagaStatus))
+        return approvalOutboxJpaRepository.findByTypeAndSagaIdAndSagaStatusIn(type, sagaId,
+                Arrays.asList(sagaStatus))
             .map(approvalOutboxDataAccessMapper::toMessage);
     }
 
     @Override
-    public void deleteByTypeAndOutboxStatusAndSagaStatus(String type, OutboxStatus outboxStatus, SagaStatus... sagaStatus) {
-        approvalOutboxJpaRepository.deleteByTypeAndOutboxStatusAndSagaStatusIn(type, outboxStatus, Arrays.asList(sagaStatus));
+    public void deleteByTypeAndOutboxStatusAndSagaStatus(String type, OutboxStatus outboxStatus,
+        SagaStatus... sagaStatus) {
+        approvalOutboxJpaRepository.deleteByTypeAndOutboxStatusAndSagaStatusIn(type, outboxStatus,
+            Arrays.asList(sagaStatus));
     }
 }

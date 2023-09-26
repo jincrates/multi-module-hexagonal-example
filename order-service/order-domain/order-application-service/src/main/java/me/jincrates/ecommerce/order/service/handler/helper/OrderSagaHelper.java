@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class OrderSagaHelper {
 
     private final OrderPort orderPort;
-
+    
     public SagaStatus toSagaStatus(OrderStatus orderStatus) {
         return switch (orderStatus) {
             case PAID -> SagaStatus.PROCESSING;

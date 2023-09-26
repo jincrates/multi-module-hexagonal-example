@@ -9,7 +9,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.math.BigInteger;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -24,6 +24,7 @@ import me.jincrates.ecommerce.domain.valueobject.OrderStatus;
 @Table(name = "orders")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderEntity {
+
     @Id
     private UUID id;
     private UUID customerId;
@@ -38,7 +39,7 @@ public class OrderEntity {
     private OrderAddressEntity address;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-    private List<OrderItemEntity> items = new ArrayList<>();
+    private List<OrderItemEntity> items = Collections.emptyList();
 
     @Builder
     private OrderEntity(UUID id, UUID customerId, UUID storeId, UUID trackingId,
@@ -57,8 +58,12 @@ public class OrderEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         OrderEntity that = (OrderEntity) o;
         return id.equals(that.id);
     }

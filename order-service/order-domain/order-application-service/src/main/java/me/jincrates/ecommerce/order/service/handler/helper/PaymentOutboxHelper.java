@@ -22,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class PaymentOutboxHelper {
+
     private final PaymentOutboxPort paymentOutboxPort;
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public void savePaymentOutboxMessage(OrderPaymentEventPayload paymentEventPayload, OrderStatus orderStatus,
+    public void savePaymentOutboxMessage(OrderPaymentEventPayload paymentEventPayload,
+        OrderStatus orderStatus,
         SagaStatus sagaStatus, OutboxStatus outboxStatus, UUID sagaId) {
         save(OrderPaymentOutboxMessage.builder()
             .id(UUID.randomUUID())
@@ -44,18 +46,22 @@ public class PaymentOutboxHelper {
     public void save(OrderPaymentOutboxMessage orderPaymentOutboxMessage) {
         OrderPaymentOutboxMessage response = paymentOutboxPort.save(orderPaymentOutboxMessage);
         if (response == null) {
-            log.error("Could not save OrderPaymentOutboxMessage with outbox id: {}", orderPaymentOutboxMessage.getId());
-            throw new OrderDomainException("Could not save OrderPaymentOutboxMessage with outbox id: "
-                + orderPaymentOutboxMessage.getId());
+            log.error("Could not save OrderPaymentOutboxMessage with outbox id: {}",
+                orderPaymentOutboxMessage.getId());
+            throw new OrderDomainException(
+                "Could not save OrderPaymentOutboxMessage with outbox id: "
+                    + orderPaymentOutboxMessage.getId());
         }
-        log.info("OrderPaymentOutboxMessage saved with outbox id: {}", orderPaymentOutboxMessage.getId());
+        log.info("OrderPaymentOutboxMessage saved with outbox id: {}",
+            orderPaymentOutboxMessage.getId());
     }
 
     @Transactional(readOnly = true)
-    public Optional<OrderPaymentOutboxMessage> getPaymentOutboxMessageBySagaIdAndSagaStatus(UUID sagaId, SagaStatus... sagaStatus) {
-        return paymentOutboxPort.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId, sagaStatus);
+    public Optional<OrderPaymentOutboxMessage> getPaymentOutboxMessageBySagaIdAndSagaStatus(
+        UUID sagaId, SagaStatus... sagaStatus) {
+        return paymentOutboxPort.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId,
+            sagaStatus);
     }
-
 
     private String createPayload(OrderPaymentEventPayload paymentEventPayload) {
         try {
@@ -64,8 +70,9 @@ public class PaymentOutboxHelper {
             log.error("Could not create OrderPaymentEventPayload object for order id: {}",
                 paymentEventPayload.orderId(), ex);
 
-            throw new OrderDomainException("Could not create OrderPaymentEventPayload object for order id: " +
-                paymentEventPayload.orderId(), ex);
+            throw new OrderDomainException(
+                "Could not create OrderPaymentEventPayload object for order id: " +
+                    paymentEventPayload.orderId(), ex);
         }
     }
 }

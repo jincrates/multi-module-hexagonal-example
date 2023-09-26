@@ -18,9 +18,10 @@ public record CreateOrderCommand(
     @NotNull
     OrderAddress address
 ) {
+
     public record OrderItem(
         @NotNull
-         UUID productId,
+        UUID productId,
         @NotNull
         Integer quantity,
         @NotNull

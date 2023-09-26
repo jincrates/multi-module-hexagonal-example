@@ -45,27 +45,14 @@ public class OrderPaymentSagaHandler implements SagaStep<PaymentResponse> {
     @Override
     @Transactional
     public void process(PaymentResponse paymentResponse) {
-        Optional<OrderPaymentOutboxMessage> orderPaymentOutboxMessageResponse =
-            paymentOutboxHelper.getPaymentOutboxMessageBySagaIdAndSagaStatus(
-                UUID.fromString(paymentResponse.sagaId()),
-                SagaStatus.STARTED
-            );
-
-        if (orderPaymentOutboxMessageResponse.isEmpty()) {
-            log.info("An outbox message with saga id: {} is already processed!",
-                paymentResponse.sagaId());
-            return;
-        }
-
-        OrderPaymentOutboxMessage orderPaymentOutboxMessage = orderPaymentOutboxMessageResponse.get();
+        OrderPaymentOutboxMessage orderPaymentOutboxMessage = getOrderPaymentOutboxMessage(
+            paymentResponse, SagaStatus.STARTED);
         OrderPaidEvent domainEvent = completePaymentForOrder(paymentResponse);
         SagaStatus sagaStatus = orderSagaHelper.toSagaStatus(
             domainEvent.getOrder().getOrderStatus());
 
-        paymentOutboxHelper.save(
-            getUpdatedPaymentOutboxMessage(orderPaymentOutboxMessage,
-                domainEvent.getOrder().getOrderStatus(), sagaStatus)
-        );
+        paymentOutboxHelper.save(getUpdatedPaymentOutboxMessage(orderPaymentOutboxMessage,
+            domainEvent.getOrder().getOrderStatus(), sagaStatus));
 
         approvalOutboxHelper.saveApprovalOutboxMessage(
             orderDataMapper.toOrderApprovalEventPayload(domainEvent),
@@ -74,39 +61,43 @@ public class OrderPaymentSagaHandler implements SagaStep<PaymentResponse> {
             OutboxStatus.STARTED,
             UUID.fromString((paymentResponse.sagaId()))
         );
-
         log.info("Order with id: {} is paid", domainEvent.getOrder().getId().getValue());
     }
 
     @Override
     public void rollback(PaymentResponse paymentResponse) {
-        Optional<OrderPaymentOutboxMessage> orderPaymentOutboxMessageResponse =
-            paymentOutboxHelper.getPaymentOutboxMessageBySagaIdAndSagaStatus(
-                UUID.fromString(paymentResponse.sagaId()),
-                getCurrentSagaStatus(paymentResponse.paymentStatus())
-            );
-
-        if (orderPaymentOutboxMessageResponse.isEmpty()) {
-            log.info("An outbox message with saga id: {} is already roll backed!",
-                paymentResponse.sagaId());
-            return;
-        }
-
-        OrderPaymentOutboxMessage orderPaymentOutboxMessage = orderPaymentOutboxMessageResponse.get();
+        OrderPaymentOutboxMessage orderPaymentOutboxMessage = getOrderPaymentOutboxMessage(
+            paymentResponse, getCurrentSagaStatus(paymentResponse.paymentStatus()));
         Order order = rollbackPaymentForOrder(paymentResponse);
         SagaStatus sagaStatus = orderSagaHelper.toSagaStatus(order.getOrderStatus());
 
         paymentOutboxHelper.save(
             getUpdatedPaymentOutboxMessage(orderPaymentOutboxMessage, order.getOrderStatus(),
-                sagaStatus)
-        );
+                sagaStatus));
 
         if (paymentResponse.paymentStatus() == PaymentStatus.CANCELLED) {
             approvalOutboxHelper.save(
                 getUpdatedApprovalOutboxMessage(paymentResponse.sagaId(), order.getOrderStatus(),
                     sagaStatus)
             );
+            log.info("Order with id: {} is roll backed!", order.getId().getValue());
         }
+    }
+
+    private OrderPaymentOutboxMessage getOrderPaymentOutboxMessage(
+        PaymentResponse paymentResponse, SagaStatus... sagaStatus) {
+        Optional<OrderPaymentOutboxMessage> orderPaymentOutboxMessageResponse =
+            paymentOutboxHelper.getPaymentOutboxMessageBySagaIdAndSagaStatus(
+                UUID.fromString(paymentResponse.sagaId()),
+                sagaStatus);
+
+        if (orderPaymentOutboxMessageResponse.isEmpty()) {
+            log.info("An outbox message with saga id: {} is already executed!",
+                paymentResponse.sagaId());
+            return null;
+        }
+
+        return orderPaymentOutboxMessageResponse.get();
     }
 
     private OrderPaidEvent completePaymentForOrder(PaymentResponse paymentResponse) {

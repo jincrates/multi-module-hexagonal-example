@@ -76,11 +76,11 @@ public class OrderDataMapper {
     private List<OrderItem> toOrderItemEntities(List<CreateOrderCommand.OrderItem> orderItems) {
         return orderItems.stream()
             .map(orderItem -> OrderItem.builder()
-                    .product(new Product(new ProductId(orderItem.productId())))
-                    .price(new Money(orderItem.price()))
-                    .quantity(orderItem.quantity())
-                    .subTotal(new Money(orderItem.subTotal()))
-                    .build())
+                .product(new Product(new ProductId(orderItem.productId())))
+                .price(new Money(orderItem.price()))
+                .quantity(orderItem.quantity())
+                .subTotal(new Money(orderItem.subTotal()))
+                .build())
             .toList();
     }
 
@@ -92,7 +92,7 @@ public class OrderDataMapper {
                 .toList())
             .build();
     }
-
+    
     public OrderApprovalEventPayload toOrderApprovalEventPayload(OrderPaidEvent orderPaidEvent) {
         return new OrderApprovalEventPayload(
             orderPaidEvent.getOrder().getId().getValue().toString(),

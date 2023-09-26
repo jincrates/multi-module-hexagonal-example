@@ -39,8 +39,10 @@ public class ApprovalOutboxHelper {
             .build());
     }
 
-    public Optional<OrderApprovalOutboxMessage> getApprovalOutboxMessageBySagaIdAndSagaStatus(UUID sagaId, SagaStatus... sagaStatus) {
-        return approvalOutboxPort.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId, sagaStatus);
+    public Optional<OrderApprovalOutboxMessage> getApprovalOutboxMessageBySagaIdAndSagaStatus(
+        UUID sagaId, SagaStatus... sagaStatus) {
+        return approvalOutboxPort.findByTypeAndSagaIdAndSagaStatus(ORDER_SAGA_NAME, sagaId,
+            sagaStatus);
     }
 
     public void save(OrderApprovalOutboxMessage orderApprovalOutboxMessage) {
@@ -48,10 +50,12 @@ public class ApprovalOutboxHelper {
         if (response == null) {
             log.error("Could not save OrderApprovalOutboxMessage with outbox id: {}",
                 orderApprovalOutboxMessage.getId());
-            throw new OrderDomainException("Could not save OrderApprovalOutboxMessage with outbox id: " +
-                orderApprovalOutboxMessage.getId());
+            throw new OrderDomainException(
+                "Could not save OrderApprovalOutboxMessage with outbox id: " +
+                    orderApprovalOutboxMessage.getId());
         }
-        log.info("OrderApprovalOutboxMessage saved with outbox id: {}", orderApprovalOutboxMessage.getId());
+        log.info("OrderApprovalOutboxMessage saved with outbox id: {}",
+            orderApprovalOutboxMessage.getId());
     }
 
     private String createPayload(OrderApprovalEventPayload orderApprovalEventPayload) {
@@ -60,8 +64,9 @@ public class ApprovalOutboxHelper {
         } catch (JsonProcessingException e) {
             log.error("Could not create OrderApprovalEventPayload for order id: {}",
                 orderApprovalEventPayload.orderId(), e);
-            throw new OrderDomainException("Could not create OrderApprovalEventPayload for order id: " +
-                orderApprovalEventPayload.orderId(), e);
+            throw new OrderDomainException(
+                "Could not create OrderApprovalEventPayload for order id: " +
+                    orderApprovalEventPayload.orderId(), e);
         }
     }
 }

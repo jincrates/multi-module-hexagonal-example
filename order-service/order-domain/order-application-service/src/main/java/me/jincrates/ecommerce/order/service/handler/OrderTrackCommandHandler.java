@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 @RequiredArgsConstructor
 public class OrderTrackCommandHandler {
+
     private final OrderDataMapper orderDataMapper;
     private final OrderPort orderPort;
 
@@ -25,7 +26,8 @@ public class OrderTrackCommandHandler {
         Optional<Order> orderResult = orderPort.findByTrackingId(
             new TrackingId(trackOrderQuery.orderTrackingId()));
         if (orderResult.isEmpty()) {
-            log.warn("Could not find order with tracking id: {}", trackOrderQuery.orderTrackingId());
+            log.warn("Could not find order with tracking id: {}",
+                trackOrderQuery.orderTrackingId());
             throw new OrderNotFoundException("Could not find order with tracking id: " +
                 trackOrderQuery.orderTrackingId());
         }

@@ -2,9 +2,8 @@ package me.jincrates.ecommerce.order.dataaccess.order.mapper;
 
 import static me.jincrates.ecommerce.domain.DomainConstants.JOINING_MESSAGE_DELIMITER;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import me.jincrates.ecommerce.domain.valueobject.CustomerId;
 import me.jincrates.ecommerce.domain.valueobject.Money;
 import me.jincrates.ecommerce.domain.valueobject.OrderId;
@@ -53,8 +52,9 @@ public class OrderDataAccessMapper {
             .items(toOrderItems(orderEntity.getItems()))
             .trackingId(new TrackingId(orderEntity.getTrackingId()))
             .orderStatus(orderEntity.getOrderStatus())
-            .failureMessages(orderEntity.getFailureMessages().isEmpty() ? new ArrayList<>() :
-                new ArrayList<>(List.of(orderEntity.getFailureMessages())))
+            .failureMessages(orderEntity.getFailureMessages().isEmpty()
+                ? Collections.emptyList()
+                : List.of(orderEntity.getFailureMessages()))
             .build();
     }
 
@@ -76,7 +76,7 @@ public class OrderDataAccessMapper {
                 .quantity(orderItem.getQuantity())
                 .subTotal(orderItem.getSubTotal().getAmount())
                 .build())
-            .collect(Collectors.toList());
+            .toList();
     }
 
     private StreetAddress toDeliveryAddress(OrderAddressEntity address) {
@@ -97,7 +97,7 @@ public class OrderDataAccessMapper {
                 .quantity(orderItemEntity.getQuantity())
                 .subTotal(new Money(orderItemEntity.getSubTotal()))
                 .build())
-            .collect(Collectors.toList());
+            .toList();
     }
 
 }
