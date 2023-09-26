@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':common:common-application')
+    implementation project(':common:common-domain')
+    implementation project(':payment-service:payment-domain:payment-application-service')
+    implementation project(':payment-service:payment-domain:payment-domain-core')
+
+    implementation "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-validation:${springBootVersion}"
+
+    // swagger
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${springDocVersion}"
+}

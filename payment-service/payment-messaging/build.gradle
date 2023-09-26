@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(':common:common-domain')
+    implementation project(':payment-service:payment-domain:payment-application-service')
+    implementation project(':payment-service:payment-domain:payment-domain-core')
+    implementation project(':infra:kafka:kafka-producer')
+    implementation project(':infra:kafka:kafka-consumer')
+    implementation project(':infra:outbox')
+    implementation project(':infra:saga')
+
+    implementation "org.springframework.boot:spring-boot-starter:${springBootVersion}"
+    implementation "org.springframework.kafka:spring-kafka:${springKafkaVersion}"
+}

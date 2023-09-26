@@ -1,0 +1,13 @@
+dependencies {
+    implementation project(':payment-service:payment-domain:payment-application-service')
+    implementation project(':payment-service:payment-domain:payment-domain-core')
+    implementation project(':common:common-domain')
+    implementation project(':infra:outbox')
+    implementation project(':infra:saga')
+
+    // h2 database
+    runtimeOnly "com.h2database:h2:${h2DatabaseVersion}"
+
+    // jpa
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springBootVersion}"
+}
