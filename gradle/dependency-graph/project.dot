@@ -1,0 +1,83 @@
+digraph {
+  graph [label="ecommerce-system\n ",labelloc=t,fontsize=30,ranksep=1.4];
+  node [style=filled, fillcolor="#bbbbbb"];
+  rankdir=TB;
+
+  # Projects
+
+  ":common:common-application" [fillcolor="#eeeeee"];
+  ":common:common-domain" [fillcolor="#eeeeee"];
+  ":infra:kafka:kafka-config-data" [fillcolor="#eeeeee"];
+  ":infra:kafka:kafka-consumer" [fillcolor="#eeeeee"];
+  ":infra:kafka:kafka-producer" [fillcolor="#eeeeee"];
+  ":infra:outbox" [fillcolor="#eeeeee"];
+  ":infra:saga" [fillcolor="#eeeeee"];
+  ":order-service:order-application" [fillcolor="#eeeeee"];
+  ":order-service:order-container" [shape=box, fillcolor="#eeeeee"];
+  ":order-service:order-dataaccess" [fillcolor="#eeeeee"];
+  ":order-service:order-domain:order-application-service" [fillcolor="#eeeeee"];
+  ":order-service:order-domain:order-domain-core" [fillcolor="#eeeeee"];
+  ":order-service:order-messaging" [fillcolor="#eeeeee"];
+  ":payment-service:payment-container" [shape=box, fillcolor="#eeeeee"];
+  ":payment-service:payment-dataaccess" [shape=box, fillcolor="#eeeeee"];
+  ":payment-service:payment-domain:payment-application-service" [fillcolor="#eeeeee"];
+  ":payment-service:payment-domain:payment-domain-core" [fillcolor="#eeeeee"];
+  ":payment-service:payment-messaging" [shape=box, fillcolor="#eeeeee"];
+
+  {rank = same; ":order-service:order-container"; ":payment-service:payment-container"; ":payment-service:payment-dataaccess"; ":payment-service:payment-messaging";}
+
+  # Dependencies
+
+  ":payment-service:payment-container" -> ":common:common-application" [style=dotted]
+  ":payment-service:payment-container" -> ":common:common-domain" [style=dotted]
+  ":payment-service:payment-container" -> ":payment-service:payment-domain:payment-application-service" [style=dotted]
+  ":payment-service:payment-container" -> ":payment-service:payment-domain:payment-domain-core" [style=dotted]
+  ":payment-service:payment-messaging" -> ":common:common-domain" [style=dotted]
+  ":payment-service:payment-messaging" -> ":payment-service:payment-domain:payment-application-service" [style=dotted]
+  ":payment-service:payment-messaging" -> ":payment-service:payment-domain:payment-domain-core" [style=dotted]
+  ":payment-service:payment-messaging" -> ":infra:kafka:kafka-producer" [style=dotted]
+  ":payment-service:payment-messaging" -> ":infra:kafka:kafka-consumer" [style=dotted]
+  ":payment-service:payment-messaging" -> ":infra:outbox" [style=dotted]
+  ":payment-service:payment-messaging" -> ":infra:saga" [style=dotted]
+  ":payment-service:payment-dataaccess" -> ":payment-service:payment-domain:payment-application-service" [style=dotted]
+  ":payment-service:payment-dataaccess" -> ":payment-service:payment-domain:payment-domain-core" [style=dotted]
+  ":payment-service:payment-dataaccess" -> ":common:common-domain" [style=dotted]
+  ":payment-service:payment-dataaccess" -> ":infra:outbox" [style=dotted]
+  ":payment-service:payment-dataaccess" -> ":infra:saga" [style=dotted]
+  ":order-service:order-messaging" -> ":common:common-domain" [style=dotted]
+  ":order-service:order-messaging" -> ":order-service:order-domain:order-application-service" [style=dotted]
+  ":order-service:order-messaging" -> ":order-service:order-domain:order-domain-core" [style=dotted]
+  ":order-service:order-messaging" -> ":infra:kafka:kafka-producer" [style=dotted]
+  ":order-service:order-messaging" -> ":infra:kafka:kafka-consumer" [style=dotted]
+  ":order-service:order-messaging" -> ":infra:outbox" [style=dotted]
+  ":order-service:order-messaging" -> ":infra:saga" [style=dotted]
+  ":order-service:order-application" -> ":common:common-application" [style=dotted]
+  ":order-service:order-application" -> ":common:common-domain" [style=dotted]
+  ":order-service:order-application" -> ":order-service:order-domain:order-application-service" [style=dotted]
+  ":order-service:order-application" -> ":order-service:order-domain:order-domain-core" [style=dotted]
+  ":order-service:order-container" -> ":order-service:order-domain:order-domain-core" [style=dotted]
+  ":order-service:order-container" -> ":order-service:order-domain:order-application-service" [style=dotted]
+  ":order-service:order-container" -> ":order-service:order-application" [style=dotted]
+  ":order-service:order-container" -> ":order-service:order-dataaccess" [style=dotted]
+  ":order-service:order-container" -> ":order-service:order-messaging" [style=dotted]
+  ":order-service:order-dataaccess" -> ":order-service:order-domain:order-application-service" [style=dotted]
+  ":order-service:order-dataaccess" -> ":order-service:order-domain:order-domain-core" [style=dotted]
+  ":order-service:order-dataaccess" -> ":common:common-domain" [style=dotted]
+  ":order-service:order-dataaccess" -> ":infra:outbox" [style=dotted]
+  ":order-service:order-dataaccess" -> ":infra:saga" [style=dotted]
+  ":payment-service:payment-domain:payment-application-service" -> ":infra:saga" [style=dotted]
+  ":payment-service:payment-domain:payment-application-service" -> ":infra:outbox" [style=dotted]
+  ":payment-service:payment-domain:payment-application-service" -> ":common:common-domain" [style=dotted]
+  ":payment-service:payment-domain:payment-application-service" -> ":payment-service:payment-domain:payment-domain-core" [style=dotted]
+  ":payment-service:payment-domain:payment-domain-core" -> ":common:common-domain" [style=dotted]
+  ":infra:kafka:kafka-consumer" -> ":infra:kafka:kafka-config-data" [style=dotted]
+  ":infra:kafka:kafka-producer" -> ":infra:kafka:kafka-config-data" [style=dotted]
+  ":infra:kafka:kafka-producer" -> ":infra:outbox" [style=dotted]
+  ":infra:kafka:kafka-producer" -> ":common:common-domain" [style=dotted]
+  ":infra:kafka:kafka-producer" -> ":order-service:order-domain:order-domain-core" [style=dotted]
+  ":order-service:order-domain:order-application-service" -> ":infra:saga" [style=dotted]
+  ":order-service:order-domain:order-application-service" -> ":infra:outbox" [style=dotted]
+  ":order-service:order-domain:order-application-service" -> ":common:common-domain" [style=dotted]
+  ":order-service:order-domain:order-application-service" -> ":order-service:order-domain:order-domain-core" [style=dotted]
+  ":order-service:order-domain:order-domain-core" -> ":common:common-domain" [style=dotted]
+}

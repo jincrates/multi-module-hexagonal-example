@@ -80,3 +80,5 @@ subprojects {
         useJUnitPlatform()
     }
 }
+
+apply from: file('gradle/projectDependencyGraph.gradle')
